@@ -7,8 +7,8 @@
 public Plugin myinfo = {
 	name = "HoursLimiter",
 	author = "TouchMe",
-	description = "We prohibit players with a small number of game hours from playing",
-	version = "build_0001",
+	description = "The plugin bans a player with a certain number of hours",
+	version = "build_0002",
 	url = "https://github.com/TouchMe-Inc/l4d2_hours_limiter"
 };
 
@@ -20,6 +20,7 @@ int g_iClientTry[MAXPLAYERS + 1];
 
 ConVar
 	g_cvMinPlayedHours = null, /**< sm_min_played_hours */
+	g_cvMaxPlayedHours = null, /**< sm_max_played_hours */
 	g_cvMaxTryCheckPlayerHours = null; /**< sm_max_try_check_player_hours */
 
 
@@ -42,6 +43,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 public void OnPluginStart()
 {
 	g_cvMinPlayedHours = CreateConVar("sm_min_played_hours", "10.0", "Minimum number of hours allowed to play");
+	g_cvMaxPlayedHours = CreateConVar("sm_max_played_hours", "99999.0", "Maximum number of hours allowed to play");
 	g_cvMaxTryCheckPlayerHours = CreateConVar("sm_max_try_check_player_hours", "3", "Maximum number of attempts to check the played time");
 }
 
@@ -99,9 +101,14 @@ bool CheckPlayerHours(int iClient)
 
 	float fHours = SecToHours(iPlayedTime);
 	float fMinPlayedHours = GetConVarFloat(g_cvMinPlayedHours);
+	float fMaxPlayedHours = GetConVarFloat(g_cvMaxPlayedHours);
 
 	if (fHours < fMinPlayedHours) {
 		ServerCommand("sm_kick #%i \"Must have more than %.1f hours of play\"", GetClientUserId(iClient), fMinPlayedHours);
+	}
+
+	else if (fHours > fMaxPlayedHours) {
+		ServerCommand("sm_kick #%i \"There should be no more than %.1f hours of play\"", GetClientUserId(iClient), fMaxPlayedHours);
 	}
 
 	return true;
