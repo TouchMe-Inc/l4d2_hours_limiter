@@ -68,7 +68,7 @@ Action Timer_TryCheckPlayerHours(Handle hTimer, int iClient)
 
 void TryCheckPlayerHours(int iClient)
 {
-	if (IsFakeClient(iClient) || !IsClientInGame(iClient)) {
+	if (!IsClientInGame(iClient) || IsFakeClient(iClient) ) {
 		return;
 	}
 
