@@ -1,5 +1,5 @@
 # About hours_limiter
-The plugin bans a player with a certain number of hours.
+The plugin prevents players with a certain number of hours from entering the server.
 
 ## ConVars
 | ConVar                         | Value      | Description                                                   |
