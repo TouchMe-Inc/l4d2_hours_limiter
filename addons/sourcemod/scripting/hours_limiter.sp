@@ -7,7 +7,7 @@
 public Plugin myinfo = {
 	name = "HoursLimiter",
 	author = "TouchMe",
-	description = "The plugin bans a player with a certain number of hours",
+	description = "The plugin prevents players with a certain number of hours from entering the server",
 	version = "build_0002",
 	url = "https://github.com/TouchMe-Inc/l4d2_hours_limiter"
 };
