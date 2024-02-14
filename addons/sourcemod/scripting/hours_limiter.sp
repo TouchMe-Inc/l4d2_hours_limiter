@@ -8,7 +8,7 @@ public Plugin myinfo = {
 	name = "HoursLimiter",
 	author = "TouchMe",
 	description = "The plugin prevents players with a certain number of hours from entering the server",
-	version = "build_0002",
+	version = "build_0003",
 	url = "https://github.com/TouchMe-Inc/l4d2_hours_limiter"
 };
 
@@ -47,6 +47,15 @@ public void OnPluginStart()
 	g_cvMaxTryCheckPlayerHours = CreateConVar("sm_max_try_check_player_hours", "3", "Maximum number of attempts to check the played time");
 }
 
+public void SteamWorks_OnValidateClient(int iOwnAuthId, int iAuthId)
+{
+	int iClient = GetClientFromSteamID(iAuthId);
+
+	if (iClient > 0) {
+		SteamWorks_RequestStats(iClient, APP_L4D2);
+	}
+}
+
 public void OnClientPostAdminCheck(int iClient)
 {
 	if (!IsClientInGame(iClient) || IsFakeClient(iClient)) {
@@ -66,16 +75,16 @@ public void OnClientPostAdminCheck(int iClient)
 
 Action Timer_TryCheckPlayerHours(Handle hTimer, int iClient)
 {
+	if (!IsClientInGame(iClient) || IsFakeClient(iClient) ) {
+		return Plugin_Stop;
+	}
+
 	TryCheckPlayerHours(iClient);
 	return Plugin_Stop;
 }
 
 void TryCheckPlayerHours(int iClient)
 {
-	if (!IsClientInGame(iClient) || IsFakeClient(iClient) ) {
-		return;
-	}
-
 	if (++ g_iClientTry[iClient] > GetConVarInt(g_cvMaxTryCheckPlayerHours))
 	{
 		ServerCommand("sm_kick #%i \"Attempt #%d to determine the time played was unsuccessful\"", GetClientUserId(iClient), g_iClientTry[iClient]);
@@ -120,4 +129,22 @@ bool CheckPlayerHours(int iClient)
 
 float SecToHours(int iSeconds) {
 	return float(iSeconds) / 3600.0;
+}
+
+int GetClientFromSteamID(int iAuthId)
+{
+	for (int iClient = 1; iClient <= MaxClients; iClient ++)
+	{
+		if (!IsClientConnected(iClient)) {
+			continue;
+		}
+
+		int iSteamAccountId = GetSteamAccountID(iClient);
+
+		if (iSteamAccountId && iSteamAccountId == iAuthId) {
+			return iClient;
+		}
+	}
+
+	return 0;
 }
