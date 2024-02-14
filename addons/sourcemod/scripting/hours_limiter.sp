@@ -49,6 +49,10 @@ public void OnPluginStart()
 
 public void OnClientPostAdminCheck(int iClient)
 {
+	if (!IsClientInGame(iClient) || IsFakeClient(iClient)) {
+		return;
+	}
+
 	if (!SteamWorks_IsConnected())
 	{
 		LogError("Steamworks: No Steam Connection!");
