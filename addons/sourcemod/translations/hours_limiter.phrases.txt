@@ -1,0 +1,25 @@
+"Phrases"
+{
+    "MAX_ATTEMPT"
+    {
+        "#format"       "{1:d}"
+        "en"            "Attempt #{1} to determine the time played was unsuccessful"
+    }
+
+    "KICK_HIDDEN_HOURS"
+    {
+        "en"            "Kicked because hidden game hours"
+    }
+
+    "MIN_HOURS_LIMIT"
+    {
+        "#format"       "{1:.1f}"
+        "en"            "Must have more than {1} hours of play"
+    }
+
+    "MAX_HOURS_LIMIT"
+    {
+        "#format"       "{1:.1f}"
+        "en"            "There should be no more than {1} hours of play"
+    }
+}
