@@ -85,7 +85,9 @@ void TryCheckPlayerHours(int iClient)
 {
     if (++ g_iClientTry[iClient] > GetConVarInt(g_cvMaxTryCheckPlayerHours))
     {
-        KickClient(iClient, "%T", "MAX_ATTEMPT", iClient, g_iClientTry[iClient]);
+        if (GetConVarBool(g_cvKickHiddenHours)) {
+            KickClient(iClient, "%T", "MAX_ATTEMPT", iClient, g_iClientTry[iClient]);
+        }
         return;
     }
 
